@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quotation Making System</title>
+    <style>
+        :root {
+            --bg-color: #fff;
+            --text-color: #000;
+            --table-bg: #f2f2f2;
+            --table-border: #000;
+            --input-bg: #fff;
+            --input-text: #000;
+        }
+
+        body.dark {
+            --bg-color: #2b2b2b;
+            --text-color: #eaeaea;
+            --table-bg: #444;
+            --table-border: #eaeaea;
+            --input-bg: #555;
+            --input-text: #fff;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        h1, h2 {
+            color: var(--text-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: var(--table-bg);
+        }
+
+        th, td {
+            border: 1px solid var(--table-border);
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: var(--table-bg);
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 90%;
+            padding: 5px;
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            text-align: center;
+            border: 1px solid var(--table-border);
+        }
+
+        .paper-size {
+            margin-top: 20px;
+            border: 1px solid var(--table-border);
+            padding: 10px;
+            background-color: var(--table-bg);
+        }
+
+        .summary {
+            margin-top: 20px;
+        }
+
+        .theme-switch {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-switch input {
+            margin-left: 10px;
+        }
+
+        .large-input {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .difference {
+            font-size: 20px;
+            color: Green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="dark">
+    <h1>Quotation Making System</h1>
+
+    <div class="theme-switch">
+        <label for="themeToggle">Dark Mode</label>
+        <input type="checkbox" id="themeToggle" checked onclick="toggleTheme()">
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Material</th>
+                <th>QTY</th>
+                <th>Price per Unit</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Paper</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>CTP</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>I.M</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>Ink</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>Binding</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>Tape</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>Cutting</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>Packing</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>Delivery</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+            <tr>
+                <td>Others</td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="number" onchange="calculatePrice(this)"></td>
+                <td><input type="text" readonly></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <label for="profitPercentage">Profit Percentage:</label>
+    <input type="number" id="profitPercentage" oninput="updateGrandTotal()" placeholder="Enter profit %">
+
+    <label for="jobQty">Job QTY:</label>
+    <input type="number" id="jobQty" oninput="updateGrandTotal()" placeholder="Enter job quantity">
+
+    <div class="summary">
+        <h2>Summary</h2>
+        <p>Total Value: <input type="text" id="totalValue" class="large-input" readonly></p>
+        <p>Grand Total: <input type="text" id="grandTotal" class="large-input" readonly></p>
+        <p>Unit Price: <input type="text" id="unitPrice" class="large-input" readonly></p>
+        <p>Profit: <span id="difference" class="difference">0.00</span></p>
+    </div>
+
+    <div class="paper-size">
+        <h2>Paper Sizes and Types</h2>
+        <pre>
+24x36    60 bank      500 pkt
+24x36    70 bank      500 pkt
+24x36    80 bank      500 pkt
+24x36    100 bank     500 pkt
+24x36    85 artpaper   500 pkt
+24x36    90 artpaper   500 pkt
+24x36    100 artpaper  500 pkt
+24x36    120 artpaper  500 pkt
+24x36    150 artpaper   500 pkt
+230         artboard    100 pkt
+260         artboard    100 pkt
+300         artboard    100 pkt
+24x30      Sticker    100 pkt
+        </pre>
+    </div>
+
+    <script>
+        function calculatePrice(input) {
+            const row = input.closest('tr');
+            const qty = row.cells[1].querySelector('input').value;
+            const pricePerUnit = row.cells[2].querySelector('input').value;
+            const totalPrice = row.cells[3].querySelector('input');
+
+            if (qty && pricePerUnit) {
+                totalPrice.value = (qty * pricePerUnit).toFixed(2);
+            } else {
+                totalPrice.value = '';
+            }
+
+            updateGrandTotal();
+        }
+
+        function updateGrandTotal() {
+            const profitPercentage = parseFloat(document.getElementById('profitPercentage').value) || 0;
+            const rows = document.querySelectorAll('tbody tr');
+            let totalValue = 0;
+
+            rows.forEach(row => {
+                const totalPriceInput = row.cells[3].querySelector('input');
+                const basePrice = parseFloat(totalPriceInput.value) || 0;
+                totalValue += basePrice;
+            });
+
+            const profit = (totalValue * profitPercentage) / 100;
+            const grandTotal = totalValue + profit;
+
+            document.getElementById('totalValue').value = totalValue.toFixed(2);
+            document.getElementById('grandTotal').value = grandTotal.toFixed(2);
+
+            // Calculate the difference
+            const difference = grandTotal - totalValue;
+            document.getElementById('difference').textContent = difference.toFixed(2);
+
+            // Calculate the unit price (Grand Total / Job QTY)
+            const jobQty = parseFloat(document.getElementById('jobQty').value);
+            const unitPrice = jobQty ? (grandTotal / jobQty).toFixed(2) : '0.00';
+            document.getElementById('unitPrice').value = unitPrice;
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            document.getElementById('themeToggle').checked = document.body.classList.contains('dark');
+        }
+
+        // Ensure the checkbox is checked if dark mode is active on page load
+        window.onload = function() {
+            if (document.body.classList.contains('dark')) {
+                document.getElementById('themeToggle').checked = true;
+            }
+        };
+    </script>
+</body>
+</html>
+
